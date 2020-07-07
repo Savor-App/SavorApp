@@ -1,4 +1,4 @@
-import {AppConstants} from "../../Themes";
+import {AppConstants} from "../../Services";
 
 export default function reducer(state = {
     internetConnected: true,

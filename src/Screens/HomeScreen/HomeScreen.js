@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity, Alert} from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
-import {UtilityService} from '../../Services';
-import {AppConstants} from '../../Themes';
+import {UtilityService, AppConstants} from '../../Services';
 import {connect} from 'react-redux';
 import * as HomeActions from './HomeActions';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';

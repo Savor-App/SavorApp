@@ -1,5 +1,4 @@
-import {AppConstants} from '../../Themes';
-import {UtilityService} from '../../Services';
+import {UtilityService, AppConstants} from '../../Services';
 import Geocoder from "react-native-geocoding";
 import Geolocation from 'react-native-geolocation-service';
 

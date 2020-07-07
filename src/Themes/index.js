@@ -1,7 +1,5 @@
-import APIConstants from './APIConstants';
-import AppConstants from './AppConstants';
+import Colors from './Colors';
 
 export {
-    APIConstants,
-    AppConstants,
+    Colors
 }
