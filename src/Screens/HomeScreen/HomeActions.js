@@ -2,20 +2,21 @@ import {AppConstants} from '../../Themes';
 import {UtilityService} from '../../Services';
 import Geocoder from "react-native-geocoding";
 import Geolocation from 'react-native-geolocation-service';
+
+
 export function setSourceCoords() {
-    return async dispatch => {
+    return dispatch => {
         Geolocation.getCurrentPosition(
             (position) => {
                 console.log(position);
-
                 let source = {
                     latitude: position.coords.latitude,
                     longitude: position.coords.longitude,
                     latitudeDelta: AppConstants.LATITUDE_DELTA,
                     longitudeDelta: AppConstants.LONGITUDE_DELTA,
                 };
-                dispatch(setSourceAddress());
                 dispatch({type: 'SET_SOURCE_COORDS', payload: source});
+                dispatch(setSourceAddress());
             },
             (error) => {
                 console.log(error.code, error.message);

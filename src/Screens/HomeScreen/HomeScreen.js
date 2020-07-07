@@ -16,8 +16,8 @@ class HomeScreen extends Component {
 
     componentDidMount() {
         console.log("DIDMOUNT=================");
+        UtilityService.requestGeoLocationPermissions();
         this.props.setSourceCoords();
-
     }
 
     render() {
@@ -43,6 +43,7 @@ class HomeScreen extends Component {
                             let coords = e.nativeEvent.coordinate;
                             console.log('dragEnd', coords);
                             this.props.setSourceLatLong(coords.latitude, coords.longitude);
+                            this.props.setSourceAddress();
                         }}
                         coordinate={this.props.sourceCoords}
                         title={'Source'}
