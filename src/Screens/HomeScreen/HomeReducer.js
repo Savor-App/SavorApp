@@ -1,21 +1,24 @@
+import {AppConstants} from "../../Themes";
+
 export default function reducer(state = {
-    locale: null,
     internetConnected: true,
-    prevRoute: null,
-    currRoute: null
+    sourceCoords: {
+        latitude: 0,
+        longitude: 0,
+        latitudeDelta: AppConstants.LATITUDE_DELTA,
+        longitudeDelta: AppConstants.LONGITUDE_DELTA,
+    },
+    sourceAddress: {},
 }, action) {
     switch (action.type) {
-        case "SET_LOCALE": {
-            return {...state, locale: action.payload};
+        case "SET_SOURCE_COORDS": {
+            return {...state, sourceCoords: action.payload};
+        }
+        case "SET_SOURCE_ADDRESS": {
+            return {...state, sourceAddress: action.payload};
         }
         case "SET_INTERNET_CONNECTED": {
             return {...state, internetConnected: action.payload};
-        }
-        case "SET_PREV_ROUTE": {
-            return {...state, prevRoute: action.payload};
-        }
-        case "SET_CURR_ROUTE": {
-            return {...state, currRoute: action.payload};
         }
         default:
             return state;
