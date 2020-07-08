@@ -1,22 +1,28 @@
 import React, {Component} from 'react';
-import {
-    SafeAreaView,
-    StyleSheet,
-    ScrollView,
-    View,
-    Text,
-    StatusBar,
-} from 'react-native';
+import { View, Linking, Text} from 'react-native';
 import HomeScreen from './Screens/HomeScreen/HomeScreen';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 
+
+const Drawer = createDrawerNavigator();
+const CustomDrawerContent = (props) => (
+    <View>
+        <Text>
+            This is a test
+        </Text>
+    </View>
+);
 class Boot extends Component {
     render() {
         return (
-            <View>
-                <HomeScreen/>
-            </View>
+            <NavigationContainer>
+                <Drawer.Navigator initialRouteName="Home" drawerType={'front'} drawerContent={props => <CustomDrawerContent {...props} />}>
+                    <Drawer.Screen name="Home" component={HomeScreen} />
+                </Drawer.Navigator>
+            </NavigationContainer>
         )
     }
 }
-
 export default Boot;
