@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {connect} from 'react-redux';
 import * as HomeActions from './HomeActions';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
+import styles from './HomeStyles';
 import Colors from "../../Themes/Colors";
 
 navigator.geolocation = require('@react-native-community/geolocation');
@@ -32,8 +33,8 @@ class HomeScreen extends Component {
             <View style={{flex: 1}}>
 
                 <MapView provider={PROVIDER_GOOGLE}
-                         style={{position: 'absolute', top: 0, bottom: 0, left: 0, right: 0}}
-                         minZoomLevel={10}
+                         style={styles.map}
+                         minZoomLevel={15}
                          region={this.props.sourceCoords}>
                     <Marker
                         draggable
@@ -52,20 +53,36 @@ class HomeScreen extends Component {
                         description={'Destination Name'}
                     />
                 </MapView>
-                <View style={{backgroundColor: Colors.white, marginTop: 10, padding: 10,marginHorizontal:10, flexDirection:'row'}}>
+                <View style={{backgroundColor: Colors.white, marginTop: 10, padding: 10,marginHorizontal:10, flexDirection:'row',height:100}}>
                     <TouchableOpacity
                         style={{justifyContent:'center', marginHorizontal:5}}
                         onPress={() => {this.props.navigation.openDrawer();
                     }}>
                         <Icon name={'bars'} size={22} />
                     </TouchableOpacity>
-                    <View style={{marginLeft:10}}>
-                        <Text>{'Latitude' + this.props.sourceCoords.latitude + '  Longitude' + this.props.sourceCoords.longitude}</Text>
-                        <Text>{this.props.sourceAddress.long_name}</Text>
+                    <View style={{marginLeft:10,flex:8}}>
+                        <GooglePlacesAutocomplete
+                            placeholder='Search'
+                            onPress={(data, details = null) => {
+                                // 'details' is provided when fetchDetails = true
+                                console.log(data, details);
+                                console.log(JSON.stringify(details.geometry.location));
+                                this.props.setSourceLatLong(details.geometry.location.lat, details.geometry.location.lng);
+                            }}
+                            query={{
+                                key: AppConstants.API_KEY,
+                                language: 'en',
+                            }}
+                            fetchDetails={true}
+                            nearbyPlacesAPI='GooglePlacesSearch'
+                            GooglePlacesDetailsQuery={{ fields: 'geometry',}}
+                        />
                     </View>
-
                 </View>
-
+                <View style={{marginHorizontal:10, padding:10}}>
+                    <Text style={{textAlign:'center', backgroundColor:Colors.white}}>{'Latitude' + this.props.sourceCoords.latitude + '  Longitude' + this.props.sourceCoords.longitude}</Text>
+                    <Text style={{textAlign:'center', backgroundColor:Colors.white}}>{this.props.sourceAddress.long_name}</Text>
+                </View>
             </View>
         );
     }
