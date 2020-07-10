@@ -55,7 +55,7 @@ class HomeScreen extends Component {
                 </MapView>
                 <View style={{backgroundColor: Colors.white, marginTop: 10, padding: 10,marginHorizontal:10, flexDirection:'row',height:100}}>
                     <TouchableOpacity
-                        style={{justifyContent:'center', marginHorizontal:5}}
+                        style={{justifyContent:'flex-start', marginHorizontal:5, marginTop:10}}
                         onPress={() => {this.props.navigation.openDrawer();
                     }}>
                         <Icon name={'bars'} size={22} />
