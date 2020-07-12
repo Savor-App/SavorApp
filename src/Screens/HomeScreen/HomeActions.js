@@ -22,13 +22,6 @@ export function setSourceCoords() {
             },
             {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000}
         );
-
-        /*let source = UtilityService.getGPSCoords();
-        console.log("SOURCE_COORDS", source);
-        if(source!==undefined){
-            console.log("SOURCE_COORDS", source);
-            dispatch({type: 'SET_SOURCE_COORDS', payload: source});
-        }*/
     }
 }
 
@@ -43,6 +36,21 @@ export function setSourceLatLong(lat, long) {
         console.log("SOURCE_COORDS", source);
         dispatch({type: 'SET_SOURCE_COORDS', payload: source});
         setSourceAddress();
+    }
+}
+
+
+export function setDestinationLatLong(lat, long) {
+    return dispatch => {
+        let dest = {
+            latitude: lat,
+            longitude: long,
+            latitudeDelta: AppConstants.LATITUDE_DELTA,
+            longitudeDelta: AppConstants.LONGITUDE_DELTA,
+        };
+        console.log("DESTINATION_COORDS", dest);
+        dispatch({type: 'SET_DESTINATION_COORDS', payload: dest});
+        // setSourceAddress();
     }
 }
 
@@ -64,4 +72,18 @@ export function setSourceAddress() {
         console.log("SOURCE_ADDRESS", address);
         dispatch({type: 'SET_SOURCE_ADDRESS', payload: address});*/
     }
+}
+
+export function setSourceFocus(bool) {
+    return dispatch => {
+        dispatch({type: 'SET_SOURCE_FOCUS', payload: bool});
+        // dispatch({type:'SET_DESTINATION_FOCUS', payload: !bool});
+    };
+}
+
+export function setDestinationFocus(bool) {
+    return dispatch => {
+        dispatch({type:'SET_DESTINATION_FOCUS', payload: bool});
+        // dispatch({type: 'SET_SOURCE_FOCUS', payload: !bool});
+    };
 }
