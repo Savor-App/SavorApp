@@ -1,5 +1,5 @@
 import Colors from "../../Themes/Colors";
-
+import {AppConstants} from '../../Services';
 const styles ={
     container:{
         flex: 1,
@@ -27,6 +27,7 @@ const styles ={
         // backgroundColor:Colors.gray
     },
     sourceSearchBarContainer:{
+        borderRadius:10,
         backgroundColor: Colors.white,
         marginTop: 10,
         padding: 10,
@@ -65,7 +66,32 @@ const styles ={
         justifySelf:'flex-end',
         elevation:1
     },
-
+    bottomNavBar:{
+        backgroundColor:Colors.figmaBlue,
+        position:'absolute',
+        bottom:0,
+        height:'10%',
+        width:AppConstants.SCREEN_WIDTH,
+        justifyContent:'space-around',
+        flexDirection:'row'
+    },
+    bottomNavBarButtonContainer:{
+        flex:1,
+        padding:10,
+        // backgroundColor:Colors.gray,
+        alignItems:'center',
+        justifyContent:'center',
+    },
+    bottomNavBarButtonText:{
+        color:Colors.white,
+        fontSize:20,
+    },
+    divider:{
+        width:1,
+        borderLeftWidth:1,
+        borderColor:Colors.white,
+        marginVertical:10,
+    }
 
 };
 

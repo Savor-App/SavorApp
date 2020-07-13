@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, TouchableOpacity, Alert, Button, ScrollView} from 'react-native';
+import {View, Text, TouchableOpacity, Alert, Button, ScrollView,Keyboard} from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import {UtilityService, AppConstants} from '../../Services';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -28,6 +28,11 @@ class HomeScreen extends Component {
                 <MapView provider={PROVIDER_GOOGLE}
                          style={styles.map}
                          minZoomLevel={15}
+                         onPress={ () => {
+                             this.props.setSourceFocus(false);
+                             this.props.setDestinationFocus(false);
+                             Keyboard.dismiss();
+                         }}
                          region={this.props.sourceCoords}>
                     <Marker
                         draggable
@@ -117,7 +122,7 @@ class HomeScreen extends Component {
                         />
                     </View>
                 </View>
-                <View style={styles.coordinatesAndAddressContainer}>
+                {null ? <View style={styles.coordinatesAndAddressContainer}>
                     <Text style={{
                         textAlign: 'center',
                         backgroundColor: Colors.white
@@ -126,6 +131,15 @@ class HomeScreen extends Component {
                         textAlign: 'center',
                         backgroundColor: Colors.white
                     }}>{this.props.sourceAddress.long_name}</Text>
+                </View> : null}
+                <View style={styles.bottomNavBar}>
+                    <TouchableOpacity style={styles.bottomNavBarButtonContainer}>
+                        <Text style={styles.bottomNavBarButtonText}>Hospitals</Text>
+                    </TouchableOpacity>
+                    <View style={styles.divider}/>
+                    <TouchableOpacity style={styles.bottomNavBarButtonContainer}>
+                        <Text style={styles.bottomNavBarButtonText}>Specialist</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
         );
