@@ -91,6 +91,19 @@ const styles ={
         borderLeftWidth:1,
         borderColor:Colors.white,
         marginVertical:10,
+    },
+    emergencyButtonContainer:{
+        borderRadius:50,
+        backgroundColor:Colors.white,
+        width:70,
+        height:70,
+        position:'absolute',
+        bottom:0,
+        alignSelf:'center',
+        marginBottom:30,
+        elevation:4,
+        justifyContent:'center',
+        alignItems:'center',
     }
 
 };

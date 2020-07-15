@@ -7,6 +7,7 @@ const Colors = {
     accent: '#e4fcf9',
     gray: '#999',
     figmaBlue:'#74AEDB',
+    red:'#ce2029',
 };
 
 export default Colors;

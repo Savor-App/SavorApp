@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity, Alert, Button, ScrollView,Keyboard} from 'react-native';
-import MapView, {PROVIDER_GOOGLE, Marker, Polyline} from 'react-native-maps';
+import MapView, {PROVIDER_GOOGLE, Marker, Polyline,} from 'react-native-maps';
 import {UtilityService, AppConstants} from '../../Services';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {connect} from 'react-redux';
@@ -8,6 +8,7 @@ import * as HomeActions from './HomeActions';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import styles from './HomeStyles';
 import Colors from "../../Themes/Colors";
+import RBSheet from "react-native-raw-bottom-sheet";
 
 navigator.geolocation = require('@react-native-community/geolocation');
 
@@ -36,7 +37,7 @@ class HomeScreen extends Component {
                          region={this.props.sourceCoords}>
                     {this.props.routeCoords.size!==0 ? <Polyline
                         coordinates={[
-                         //   {latitude: initial.latitude, longitude: initial.longitude}, // optional
+                           // {latitude: this.props.sourceCoords.latitude, longitude: this.props.sourceCoords.longitude}, // optional
                             ...this.props.routeCoords,
                          //   {latitude: final.latitude, longitude: final.longitude}, // optional
                         ]}
@@ -73,6 +74,7 @@ class HomeScreen extends Component {
                     </TouchableOpacity>
                     <View style={styles.sourceSearchBar}>
                         <GooglePlacesAutocomplete
+                            ref="sourceLocation"
                             style={styles.sourceSearchInput}
                             placeholder='Search Source'
                             onPress={(data, details = null) => {
@@ -106,6 +108,7 @@ class HomeScreen extends Component {
                 <View style={[styles.sourceSearchBarContainer, {height: this.props.destinationFocus ? 200 : 63}]}>
                     <View style={styles.sourceSearchBar}>
                         <GooglePlacesAutocomplete
+                            ref='destinationLocation'
                             style={styles.sourceSearchInput}
                             placeholder='Search Destination'
                             onPress={(data, details = null) => {
@@ -114,6 +117,7 @@ class HomeScreen extends Component {
                                 console.log(JSON.stringify(details.geometry.location));
                                 this.props.setDestinationLatLong(details.geometry.location.lat, details.geometry.location.lng);
                                 this.props.setDestinationFocus(false);
+                                this.props.getDirections(this.props.sourceCoords, this.props.destinationCoords);
                             }}
                             query={{
                                 key: AppConstants.API_KEY,
@@ -133,6 +137,16 @@ class HomeScreen extends Component {
                             GooglePlacesDetailsQuery={{fields: 'geometry',}}
                         />
                     </View>
+                    {this.props.destinationCoords.latitude!==0 ? <TouchableOpacity
+                        style={styles.drawerIcon}
+                        onPress={() => {
+                            this.refs.destinationLocation.setAddressText('');
+                            this.props.setSourceFocus(false);
+                            this.props.setDestinationFocus(false);
+                            Keyboard.dismiss();
+                        }}>
+                        <Icon name={'times-circle'} size={22}/>
+                    </TouchableOpacity>: null}
                 </View>
                 {null ? <View style={styles.coordinatesAndAddressContainer}>
                     <Text style={{
@@ -144,13 +158,14 @@ class HomeScreen extends Component {
                         backgroundColor: Colors.white
                     }}>{this.props.sourceAddress.long_name}</Text>
                 </View> : null}
-                <TouchableOpacity
+                {/*<TouchableOpacity
                     onPress={()=> {this.props.getDirections(this.props.sourceCoords, this.props.destinationCoords)}}
                 >
                     <Text>GET DIRECTIONS</Text>
-                </TouchableOpacity>
+                </TouchableOpacity>*/}
+
                 <View style={styles.bottomNavBar}>
-                    <TouchableOpacity style={styles.bottomNavBarButtonContainer}>
+                    <TouchableOpacity style={styles.bottomNavBarButtonContainer} onPress={() => this.RBSheet.open()}>
                         <Text style={styles.bottomNavBarButtonText}>Hospitals</Text>
                     </TouchableOpacity>
                     <View style={styles.divider}/>
@@ -158,6 +173,26 @@ class HomeScreen extends Component {
                         <Text style={styles.bottomNavBarButtonText}>Specialist</Text>
                     </TouchableOpacity>
                 </View>
+                <TouchableOpacity style={styles.emergencyButtonContainer}>
+                    <Icon name={'plus'} size={45} color={Colors.red}/>
+                </TouchableOpacity>
+                <RBSheet
+                    ref={ref => {
+                        this.RBSheet = ref;
+                    }}
+                    height={300}
+                    openDuration={250}
+                    customStyles={{
+                        container: {
+                            justifyContent: "center",
+                            alignItems: "center"
+                        }
+                    }}
+                >
+                    <View>
+                        <Text>Hello</Text>
+                    </View>
+                </RBSheet>
             </View>
         );
     }
@@ -172,7 +207,7 @@ function mapStateToProps(state) {
         destinationAddress: state.homeReducer.destinationAddress,
         destinationFocus: state.homeReducer.destinationFocus,
         routeCoords: state.homeReducer.routeCoords,
-
+        hospitalsBottomSheetVisibility: state.homeReducer.hospitalsBottomSheetVisibility,
     };
 }
 

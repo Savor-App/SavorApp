@@ -39,7 +39,6 @@ export function setSourceLatLong(lat, long) {
     }
 }
 
-
 export function setDestinationLatLong(lat, long) {
     return dispatch => {
         let dest = {
@@ -67,10 +66,6 @@ export function setSourceAddress() {
             .catch(error =>
                 console.warn(error)
             );
-
-        /*let address = UtilityService.getAddressFromCoords(sourceCoords.latitude, sourceCoords.longitude);
-        console.log("SOURCE_ADDRESS", address);
-        dispatch({type: 'SET_SOURCE_ADDRESS', payload: address});*/
     }
 }
 
