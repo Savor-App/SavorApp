@@ -55,7 +55,7 @@ export function setDestinationLatLong(lat, long) {
 }
 
 export function setSourceAddress() {
-    return ( dispatch, getState ) => {
+    return (dispatch, getState) => {
         const {sourceCoords} = getState().homeReducer;
         Geocoder.init(AppConstants.API_KEY);
         Geocoder.from(sourceCoords.latitude, sourceCoords.longitude)
@@ -83,7 +83,34 @@ export function setSourceFocus(bool) {
 
 export function setDestinationFocus(bool) {
     return dispatch => {
-        dispatch({type:'SET_DESTINATION_FOCUS', payload: bool});
+        dispatch({type: 'SET_DESTINATION_FOCUS', payload: bool});
         // dispatch({type: 'SET_SOURCE_FOCUS', payload: !bool});
+    };
+}
+
+export function getDirections(source, dest) {
+    const mode = 'driving'; // 'walking';
+    const origin = source.latitude + ',' + source.longitude;
+    const destination = dest.latitude + ',' + dest.longitude;
+    const APIKEY = AppConstants.API_KEY;
+    const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${APIKEY}&mode=${mode}`;
+    console.log("CATCHMEIFYOUCAN");
+    return dispatch => {
+        fetch(url, {
+            method: 'GET'
+        })
+            .then(response => response.json())
+            .then(responseJson => {
+                console.log(responseJson);
+                console.log("CATCHMEIFYOUCAN1");
+                if (responseJson.routes.length) {
+                    const log = UtilityService.decode(responseJson.routes[0].overview_polyline.points);
+                    console.log("POLYLINE_OVERVIEW", JSON.stringify(log));
+                    dispatch({type: 'SET_ROUTE_COORDS', payload: log});
+                }
+            })
+            .catch(e => {
+                console.warn(e);
+            });
     };
 }

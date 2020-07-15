@@ -39,7 +39,7 @@ class UtilityService {
         );
     }
 
-    getAddressFromCoords(lat, long){
+    getAddressFromCoords(lat, long) {
         Geocoder.from(lat, long)
             .then(json => {
                 let addressComponent = json.results[0].address_components[0];
@@ -50,6 +50,20 @@ class UtilityService {
             .catch(error =>
                 console.warn(error)
             );
+    }
+
+    decode(t, e) {
+        let d=[];
+        for (let n, o, u = 0, l = 0, r = 0, h = 0, i = 0, a = null, c = Math.pow(10, e || 5); u < t.length;) {
+            a = null, h = 0, i = 0;
+            do a = t.charCodeAt(u++) - 63, i |= (31 & a) << h, h += 5; while (a >= 32);
+            n = 1 & i ? ~(i >> 1) : i >> 1, h = i = 0;
+            do a = t.charCodeAt(u++) - 63, i |= (31 & a) << h, h += 5; while (a >= 32);
+            o = 1 & i ? ~(i >> 1) : i >> 1, l += n, r += o, d.push([l / c, r / c])
+        }
+        return d = d.map(function (t) {
+            return {latitude: t[0], longitude: t[1]}
+        })
     }
 
 }

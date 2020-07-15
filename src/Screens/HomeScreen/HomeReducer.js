@@ -18,6 +18,7 @@ export default function reducer(state = {
     },
     destinationAddress: {},
     destinationFocus:false,
+    routeCoords: [],
 }, action) {
     switch (action.type) {
         case "SET_SOURCE_COORDS": {
@@ -40,6 +41,10 @@ export default function reducer(state = {
         }
         case "SET_DESTINATION_FOCUS":{
             return {...state, destinationFocus:action.payload};
+        }
+        case "SET_ROUTE_COORDS":{
+            console.log("ROUTE",action.payload);
+            return {...state, routeCoords:action.payload};
         }
         default:
             return state;

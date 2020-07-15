@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity, Alert, Button, ScrollView,Keyboard} from 'react-native';
-import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
+import MapView, {PROVIDER_GOOGLE, Marker, Polyline} from 'react-native-maps';
 import {UtilityService, AppConstants} from '../../Services';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {connect} from 'react-redux';
@@ -27,13 +27,22 @@ class HomeScreen extends Component {
             <View style={styles.container}>
                 <MapView provider={PROVIDER_GOOGLE}
                          style={styles.map}
-                         minZoomLevel={15}
+                         minZoomLevel={10}
                          onPress={ () => {
                              this.props.setSourceFocus(false);
                              this.props.setDestinationFocus(false);
                              Keyboard.dismiss();
                          }}
                          region={this.props.sourceCoords}>
+                    {this.props.routeCoords.size!==0 ? <Polyline
+                        coordinates={[
+                         //   {latitude: initial.latitude, longitude: initial.longitude}, // optional
+                            ...this.props.routeCoords,
+                         //   {latitude: final.latitude, longitude: final.longitude}, // optional
+                        ]}
+                        strokeColor={Colors.darkPrimary}
+                        strokeWidth={4}
+                    /> : null}
                     <Marker
                         draggable
                         onDragEnd={(e) => {
@@ -56,6 +65,9 @@ class HomeScreen extends Component {
                         style={styles.drawerIcon}
                         onPress={() => {
                             this.props.navigation.openDrawer();
+                            this.props.setSourceFocus(false);
+                            this.props.setDestinationFocus(false);
+                            Keyboard.dismiss();
                         }}>
                         <Icon name={'bars'} size={22}/>
                     </TouchableOpacity>
@@ -132,6 +144,11 @@ class HomeScreen extends Component {
                         backgroundColor: Colors.white
                     }}>{this.props.sourceAddress.long_name}</Text>
                 </View> : null}
+                <TouchableOpacity
+                    onPress={()=> {this.props.getDirections(this.props.sourceCoords, this.props.destinationCoords)}}
+                >
+                    <Text>GET DIRECTIONS</Text>
+                </TouchableOpacity>
                 <View style={styles.bottomNavBar}>
                     <TouchableOpacity style={styles.bottomNavBarButtonContainer}>
                         <Text style={styles.bottomNavBarButtonText}>Hospitals</Text>
@@ -154,6 +171,7 @@ function mapStateToProps(state) {
         destinationCoords: state.homeReducer.destinationCoords,
         destinationAddress: state.homeReducer.destinationAddress,
         destinationFocus: state.homeReducer.destinationFocus,
+        routeCoords: state.homeReducer.routeCoords,
 
     };
 }
@@ -166,6 +184,7 @@ function mapDispatchToProps(dispatch) {
         setSourceAddress: () => dispatch(HomeActions.setSourceAddress()),
         setSourceFocus: (bool) => dispatch(HomeActions.setSourceFocus(bool)),
         setDestinationFocus: (bool) => dispatch(HomeActions.setDestinationFocus(bool)),
+        getDirections:(source,dest) => dispatch(HomeActions.getDirections(source,dest)),
     };
 }
 
