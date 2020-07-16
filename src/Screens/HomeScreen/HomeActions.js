@@ -109,3 +109,9 @@ export function getDirections(source, dest) {
             });
     };
 }
+
+export function clearRouteCoords() {
+    return dispatch => {
+        return dispatch({type:'SET_ROUTE_COORDS',payload:[]});
+    }
+}

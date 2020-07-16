@@ -19,6 +19,8 @@ export default function reducer(state = {
     destinationAddress: {},
     destinationFocus:false,
     routeCoords: [],
+    hospitals: [{name:"LNJP",distance:"2.3kms"},{name:"Venkateshwar Hospital",distance:"3.5kms"},{name:"Mahindru Hospital",distance:"5.3kms"}],
+
 }, action) {
     switch (action.type) {
         case "SET_SOURCE_COORDS": {
@@ -43,7 +45,7 @@ export default function reducer(state = {
             return {...state, destinationFocus:action.payload};
         }
         case "SET_ROUTE_COORDS":{
-            console.log("ROUTE",action.payload);
+            // console.log("ROUTE",action.payload);
             return {...state, routeCoords:action.payload};
         }
         default:

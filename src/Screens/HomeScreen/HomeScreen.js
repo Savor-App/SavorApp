@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, TouchableOpacity, Alert, Button, ScrollView,Keyboard} from 'react-native';
+import {View, Text, TouchableOpacity, Alert, Button, ScrollView,Keyboard, FlatList} from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker, Polyline,} from 'react-native-maps';
 import {UtilityService, AppConstants} from '../../Services';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -21,6 +21,7 @@ class HomeScreen extends Component {
     componentDidMount() {
         UtilityService.requestGeoLocationPermissions();
         this.props.setSourceCoords();
+        this.refs.sourceLocation.setAddressText(this.props.sourceAddress.long_name);
     }
 
     render() {
@@ -70,7 +71,7 @@ class HomeScreen extends Component {
                             this.props.setDestinationFocus(false);
                             Keyboard.dismiss();
                         }}>
-                        <Icon name={'bars'} size={22}/>
+                        <Icon name={'bars'} size={22} color={Colors.darkerPrimary}/>
                     </TouchableOpacity>
                     <View style={styles.sourceSearchBar}>
                         <GooglePlacesAutocomplete
@@ -141,9 +142,11 @@ class HomeScreen extends Component {
                         style={styles.drawerIcon}
                         onPress={() => {
                             this.refs.destinationLocation.setAddressText('');
+                            this.props.clearRouteCoords();
                             this.props.setSourceFocus(false);
                             this.props.setDestinationFocus(false);
                             Keyboard.dismiss();
+                            this.props.setDestinationLatLong(0,0);
                         }}>
                         <Icon name={'times-circle'} size={22}/>
                     </TouchableOpacity>: null}
@@ -169,7 +172,7 @@ class HomeScreen extends Component {
                         <Text style={styles.bottomNavBarButtonText}>Hospitals</Text>
                     </TouchableOpacity>
                     <View style={styles.divider}/>
-                    <TouchableOpacity style={styles.bottomNavBarButtonContainer}>
+                    <TouchableOpacity style={styles.bottomNavBarButtonContainer} onPress={() => this.RBSheet1.open()}>
                         <Text style={styles.bottomNavBarButtonText}>Specialist</Text>
                     </TouchableOpacity>
                 </View>
@@ -182,16 +185,66 @@ class HomeScreen extends Component {
                     }}
                     height={300}
                     openDuration={250}
+                    animationType={'slide'}
+                    closeOnDragDown={false}
                     customStyles={{
                         container: {
                             justifyContent: "center",
-                            alignItems: "center"
+                            // alignItems: "center",
+                            borderTopLeftRadius:20,
+                            borderTopRightRadius:20,
                         }
                     }}
                 >
-                    <View>
-                        <Text>Hello</Text>
+                    <View style={styles.hospitalsHeadingTextContainer}>
+                        <Text style={styles.hospitalsHeadingText}>Hospitals</Text>
                     </View>
+                    <FlatList
+                        contentContainerStyle={{
+                            paddingHorizontal: 10,
+                            paddingVertical: 10
+                        }}
+                        data={this.props.hospitals}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={({item,index})=> (
+                            <TouchableOpacity key={index} style={styles.hospitalListItemContainer}>
+                                <Text>{item.name}</Text>
+                            </TouchableOpacity>
+                        )}
+                    />
+                </RBSheet>
+                <RBSheet
+                    ref={ref => {
+                        this.RBSheet1 = ref;
+                    }}
+                    height={300}
+                    openDuration={250}
+                    animationType={'slide'}
+                    customStyles={{
+                        container: {
+                            justifyContent: "center",
+                            // alignItems: "center"
+                            borderTopLeftRadius:20,
+                            borderTopRightRadius:20,
+                        }
+                    }}
+                >
+                    <View style={styles.hospitalsHeadingTextContainer}>
+                        <Text style={styles.hospitalsHeadingText}>Specialists</Text>
+                    </View>
+                    <FlatList
+                        contentContainerStyle={{
+                            paddingHorizontal: 10,
+                            paddingVertical: 10
+                        }}
+                        data={this.props.hospitals}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={({item,index})=> (
+                            <TouchableOpacity key={index} style={styles.hospitalListItemContainer}>
+                                <Text>{item.name}</Text>
+                            </TouchableOpacity>
+                        )}
+                    />
                 </RBSheet>
             </View>
         );
@@ -208,6 +261,7 @@ function mapStateToProps(state) {
         destinationFocus: state.homeReducer.destinationFocus,
         routeCoords: state.homeReducer.routeCoords,
         hospitalsBottomSheetVisibility: state.homeReducer.hospitalsBottomSheetVisibility,
+        hospitals: state.homeReducer.hospitals,
     };
 }
 
@@ -220,6 +274,7 @@ function mapDispatchToProps(dispatch) {
         setSourceFocus: (bool) => dispatch(HomeActions.setSourceFocus(bool)),
         setDestinationFocus: (bool) => dispatch(HomeActions.setDestinationFocus(bool)),
         getDirections:(source,dest) => dispatch(HomeActions.getDirections(source,dest)),
+        clearRouteCoords: () => dispatch(HomeActions.clearRouteCoords()),
     };
 }
 

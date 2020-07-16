@@ -104,6 +104,22 @@ const styles ={
         elevation:4,
         justifyContent:'center',
         alignItems:'center',
+    },
+    hospitalsHeadingTextContainer:{
+        backgroundColor:Colors.figmaBlue,
+        width:'100%'
+    },
+    hospitalsHeadingText:{
+        color:Colors.white,
+        textAlign:'center',
+        marginVertical:10,
+        fontSize:20,
+    },
+    hospitalListItemContainer:{
+        backgroundColor:Colors.accent,
+        // width:AppConstants.SCREEN_WIDTH,
+        marginVertical:10,
+
     }
 
 };
