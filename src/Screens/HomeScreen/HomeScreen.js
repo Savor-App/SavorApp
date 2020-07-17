@@ -9,6 +9,7 @@ import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete'
 import styles from './HomeStyles';
 import Colors from "../../Themes/Colors";
 import RBSheet from "react-native-raw-bottom-sheet";
+import SplashScreen from 'react-native-splash-screen';
 
 navigator.geolocation = require('@react-native-community/geolocation');
 
@@ -22,6 +23,7 @@ class HomeScreen extends Component {
         UtilityService.requestGeoLocationPermissions();
         this.props.setSourceCoords();
         this.refs.sourceLocation.setAddressText(this.props.sourceAddress.long_name);
+        SplashScreen.hide();
     }
 
     render() {
