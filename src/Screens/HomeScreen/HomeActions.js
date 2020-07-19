@@ -89,7 +89,6 @@ export function getDirections(source, dest) {
     const destination = dest.latitude + ',' + dest.longitude;
     const APIKEY = AppConstants.API_KEY;
     const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${APIKEY}&mode=${mode}`;
-    console.log("CATCHMEIFYOUCAN");
     return dispatch => {
         fetch(url, {
             method: 'GET'
@@ -97,7 +96,6 @@ export function getDirections(source, dest) {
             .then(response => response.json())
             .then(responseJson => {
                 console.log(responseJson);
-                console.log("CATCHMEIFYOUCAN1");
                 if (responseJson.routes.length) {
                     const log = UtilityService.decode(responseJson.routes[0].overview_polyline.points);
                     console.log("POLYLINE_OVERVIEW", JSON.stringify(log));
@@ -109,7 +107,32 @@ export function getDirections(source, dest) {
             });
     };
 }
+export function getRoute() {
+    return (dispatch, getState) => {
+        const {sourceCoords, destinationCoords} = getState().homeReducer;
+        const mode = 'driving'; // 'walking';
+        const APIKEY = AppConstants.API_KEY;
+        const origin = sourceCoords.latitude + ',' + sourceCoords.longitude;
+        const destination = destinationCoords.latitude + ',' + destinationCoords.longitude;
+        const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${APIKEY}&mode=${mode}`;
 
+        fetch(url, {
+            method: 'GET'
+        })
+            .then(response => response.json())
+            .then(responseJson => {
+                console.log(responseJson);
+                if (responseJson.routes.length) {
+                    const log = UtilityService.decode(responseJson.routes[0].overview_polyline.points);
+                    console.log("POLYLINE_OVERVIEW", JSON.stringify(log));
+                    dispatch({type: 'SET_ROUTE_COORDS', payload: log});
+                }
+            })
+            .catch(e => {
+                console.warn(e);
+            });
+    };
+}
 export function clearRouteCoords() {
     return dispatch => {
         return dispatch({type:'SET_ROUTE_COORDS',payload:[]});

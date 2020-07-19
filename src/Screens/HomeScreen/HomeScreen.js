@@ -209,7 +209,12 @@ class HomeScreen extends Component {
                         data={this.props.hospitals}
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={({item,index})=> (
-                            <TouchableOpacity key={index} style={styles.hospitalListItemContainer}>
+                            <TouchableOpacity key={index} style={styles.hospitalListItemContainer} onPress={()=>{
+                                this.props.setDestinationLatLong(item.lat, item.lng);
+                                this.RBSheet.close();
+                                this.refs.destinationLocation.setAddressText(item.name);
+                                this.props.getRoute();
+                            }}>
                                 <Text>{item.name}</Text>
                             </TouchableOpacity>
                         )}
@@ -276,6 +281,7 @@ function mapDispatchToProps(dispatch) {
         setSourceFocus: (bool) => dispatch(HomeActions.setSourceFocus(bool)),
         setDestinationFocus: (bool) => dispatch(HomeActions.setDestinationFocus(bool)),
         getDirections:(source,dest) => dispatch(HomeActions.getDirections(source,dest)),
+        getRoute:() => dispatch(HomeActions.getRoute()),
         clearRouteCoords: () => dispatch(HomeActions.clearRouteCoords()),
     };
 }

@@ -19,7 +19,7 @@ export default function reducer(state = {
     destinationAddress: {},
     destinationFocus:false,
     routeCoords: [],
-    hospitals: [{name:"LNJP",distance:"2.3kms"},{name:"Venkateshwar Hospital",distance:"3.5kms"},{name:"Mahindru Hospital",distance:"5.3kms"}],
+    hospitals: [{name:"LNJP",distance:"2.3kms", lat:28.60898,lng:76.98542 },{name:"Venkateshwar Hospital",distance:"3.5kms", lat:28.60898,lng:76.98542},{name:"Mahindru Hospital",distance:"5.3kms", lat:28.60898,lng:76.98542}],
 
 }, action) {
     switch (action.type) {
